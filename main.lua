@@ -20,8 +20,10 @@ local overlay = love.graphics.newImage("images/overlay.png")
 local gridinfo = {sizex=21, sizey=15}
 local mouse = {}
 local tileselected = false
+local debris = {}
 
 function love.load()
+    math.randomseed(os.time())
     local cursorimage = love.graphics.newImage("images/cursor.png") 
     local cursor = love.mouse.newCursor("images/cursor.png", cursorimage:getWidth()/2, cursorimage:getHeight()/2)
     love.mouse.setCursor(cursor)
@@ -42,7 +44,17 @@ function love.load()
     for y=0, gridinfo.sizey-1 do
         gridinfo.grid[y+1] = {}
         for x=0, gridinfo.sizex-1 do
-            local spotinfo = {image=tiles[1], px=x*16+8, py=y*16+8, x=x+1, y=y+1, selected = false}
+            local spotinfo = {
+                image=tiles[1],
+                px=x*16+8,
+                py=y*16+8,
+                x=x+1,
+                y=y+1,
+                selected = false,
+                debris = (math.random(1,20)==10 and "ice") or (math.random(1,20) ==10 and "debris"),
+                near = 0
+                state = "covered"
+            }
             table.insert(gridinfo.grid[y+1], x+1, spotinfo)
         end
     end
@@ -68,7 +80,21 @@ function love.draw()
         for j,y in ipairs(v) do
             love.graphics.draw(tilesheet, y.image, y.px, y.py)
             if y.selected then
+                if love.mouse.isDown(1) then
+                    y.image = tiles[2]
+                    y.state = "uncovered"
+                end
                 love.graphics.draw(tilesheet, tiles[13], y.px, y.py)
+                if y.state == "uncovered" then
+                    if y.debris then
+                        table.insert(debris, {type=y.debris, px=y.px, py=y.py})
+                    elseif y.near then
+
+                    end
+                end
+            end
+            for _,u in ipairs(debris) do
+                love.graphics.draw(tilesheet, tiles[u.type == "ice" and 3 or 4], u.px, u.py)
             end
         end
     end
