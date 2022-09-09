@@ -8,7 +8,5 @@ You have limited clicks and clicking on a water tile will give you more, however
 Once you have found all of the ice on the map you win and I will personally congratulate you and send you 500 ancient coins
 
 Be warned, the number on empty tiles can be influenced by junk tiles that won't help you at all.
-~~You will be able to find out which are water or junk though, sometimes clicking on an empty tile will give you a blue counter
-which **only** counts water and will help you decipher which tiles you should and shouldn't click.~~
 
 Made in lua, with [LOVE2D](https://love2d.org/)
